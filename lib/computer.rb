@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Deals with generating the random word
 class Computer
   attr_reader :code
 
