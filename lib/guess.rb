@@ -1,25 +1,15 @@
-class Guess
-  attr_reader :guesses
-  def initialize
-    @guesses = []
-  end
+# frozen_string_literal: true
 
-  def new_guess
-    guess = gets.chomp.downcase
-    until ('a'..'z').include?(guess)
-      puts 'Please enter a valid guess: (a-z)'
-      guess = gets.chomp.downcase
-    end
-    while already_guessed?(guess)
+# Contains methods to enter and check the palyer's guesses
+module Guess
+  def new_guess(guesses)
+    puts 'Please enter your guess: '
+    guess = valid_guess
+    while already_guessed?(guess, guesses)
       puts "You have already guessed #{guess}- guess again: "
       guess = gets.chomp.downcase
     end
-    @guesses.push(guess)
     guess
-  end
-
-  def already_guessed?(guess)
-    true if @guesses.include?(guess)
   end
 
   def correct_guess?(guess, word)
@@ -32,5 +22,20 @@ class Guess
       hidden[index] = guess if char == guess
     end
     hidden.join('')
+  end
+
+  private
+
+  def valid_guess
+    guess = gets.chomp.downcase
+    until ('a'..'z').include?(guess)
+      puts 'Please enter a valid guess: (a-z)'
+      guess = gets.chomp.downcase
+    end
+    guess
+  end
+
+  def already_guessed?(guess, guesses)
+    true if guesses.include?(guess)
   end
 end
