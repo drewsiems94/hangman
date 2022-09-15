@@ -1,50 +1,46 @@
+require_relative 'computer'
+require_relative 'guess'
+require_relative 'save_files'
 require 'yaml'
 
 class Game
   attr_accessor :turns, :word, :hidden_word, :player
+  include SaveGames
+
   def initialize(word, player)
     @turns = 8
     @word = word
     @player = player
-    @hidden_word = Array.new(@word.length, '-').join('')
+    @guesses = @player.guesses
+    @hidden_word = Array.new(word.length - 1, '-').join('')
     run_game
-  end
-
-  def to_yaml
-    YAML.dump ({
-      :turns => @turns,
-      :word => @word,
-      :hidden_word => @hidden_word,
-      :player => @player
-    })
-  end
-
-  def self.from_yaml(string)
-    data = YAML.load string
-    p data
-    self.new(data[:turns], data[:word], data[:hidden_word], data[:player])
-  end
-
-  def save_file(string)
-    Dir.mkdir('saved_games') unless Dir.exist?('saved_games')
-    filename = "saved_games/#{@word}#{rand(0..1000)}.yaml"
-    File.open(filename, 'w') do |file|
-      file.puts string
-    end
   end
 
   private
 
   def run_game
+    puts "Would you like to load a saved game? (y/n)"
+    gets.chomp == 'y' ? load_game : new_game
+  end
+
+  def load_game
+    old_game = load_file
+    @turns = old_game['turns']
+    @word = old_game['word']
+    @guesses = old_game['guesses']
+    @hidden_word = old_game['hidden_word']
+    new_game
+  end
+
+  def new_game
     until game_over?(@turns, @hidden_word, @word)
       puts @hidden_word
       puts "You have #{@turns} guesses remaining."
-      puts "You have already guessed the folowing #{@player.guesses}"
+      puts "You have already guessed the folowing #{@guesses}"
       puts "Would you like to save your progress? (y/n) "
       save = gets.chomp
       if save == 'y'
-        new_file = self.to_yaml
-        save_file(new_file)
+        save_file
         break
       else
         puts 'Please enter your guess: '
