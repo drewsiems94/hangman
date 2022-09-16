@@ -16,7 +16,12 @@ module SaveGames
   def load_file
     puts 'Please enter the name of your file: '
     filename = gets.chomp
-    YAML.safe_load(File.open("saved_games/#{filename}"))
+    begin
+      YAML.safe_load(File.open("saved_games/#{filename}"))
+    rescue
+      puts "That file does not exist!"
+      load_file
+    end
   end
 
   private
