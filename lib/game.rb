@@ -11,7 +11,7 @@ class Game
   include Guess
 
   def initialize(word)
-    @turns = 8
+    @turns = 10
     @word = word
     @guesses = []
     @file_name = ''
