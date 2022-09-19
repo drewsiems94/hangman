@@ -3,7 +3,7 @@
 # Contains methods to save or load a game
 module SaveGames
   def save_file
-    puts "If you would like to save your progress, type 'save' "
+    puts "Type 'save' to exit the game and store your progess.\nHit any other button to continue: "
     return unless gets.chomp == 'save'
 
     Dir.mkdir('saved_games') unless Dir.exist?('saved_games')
@@ -14,14 +14,21 @@ module SaveGames
   end
 
   def load_file
+    puts "The following files are available: "
+    Dir.each_child("saved_games") {|file| puts file }
     puts 'Please enter the name of your file: '
     filename = gets.chomp
+    @file_name = filename
     begin
       YAML.safe_load(File.open("saved_games/#{filename}"))
-    rescue
-      puts "That file does not exist!"
+    rescue Errno::ENOENT
+      puts 'That file does not exist!'
       load_file
     end
+  end
+
+  def delete_file(file)
+    File.delete("saved_games/#{file}") if File.exist?("saved_games/#{file}")
   end
 
   private
@@ -41,5 +48,3 @@ module SaveGames
     "#{colors[rand(0...colors.length)]}_#{things[rand(0...things.length)]}_#{rand(10..1000)}"
   end
 end
-
-# Need a rescue for file load  and delete file once loaded
