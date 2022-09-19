@@ -3,7 +3,7 @@
 # Contains methods to enter and check the palyer's guesses
 module Guess
   def new_guess(guesses)
-    puts 'Please enter your guess: '
+    print 'Please enter your guess: '
     guess = valid_guess
     while already_guessed?(guess, guesses)
       puts "You have already guessed #{guess}- guess again: "
