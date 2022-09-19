@@ -14,8 +14,7 @@ module SaveGames
   end
 
   def load_file
-    puts "The following files are available: "
-    Dir.each_child("saved_games") {|file| puts file }
+    display_files
     puts 'Please enter the name of your file: '
     filename = gets.chomp
     @file_name = filename
@@ -32,6 +31,11 @@ module SaveGames
   end
 
   private
+
+  def display_files
+    puts 'The following files are available: '
+    Dir.each_child('saved_games') { |file| puts file }
+  end
 
   def to_yaml
     YAML.dump({

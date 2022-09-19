@@ -21,6 +21,16 @@ class Game
 
   private
 
+  def play_again
+    puts 'Would you like to play again? (y/n)'
+    if gets.chomp == 'y'
+      code = Computer.new
+      Game.new(code.code)
+    else
+      exit
+    end
+  end
+
   def run_game
     puts 'Would you like to load a saved game? (y/n)'
     gets.chomp == 'y' ? load_game : new_game
@@ -48,6 +58,7 @@ class Game
 
       @turns -= 1
     end
+    play_again
   end
 
   def display_info
