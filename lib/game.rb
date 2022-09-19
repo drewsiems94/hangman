@@ -14,6 +14,7 @@ class Game
     @turns = 8
     @word = word
     @guesses = []
+    @file_name = ''
     @hidden_word = Array.new(word.length - 1, '-').join('')
     run_game
   end
@@ -31,6 +32,7 @@ class Game
     @word = old_game['word']
     @guesses = old_game['guesses']
     @hidden_word = old_game['hidden_word']
+    delete_file(@file_name)
     new_game
   end
 
